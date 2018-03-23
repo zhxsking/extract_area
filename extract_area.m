@@ -43,6 +43,21 @@ for group=3:-1:1 %第几组图片
         
         % 计算面积
         area(group, i) = sum(sum(img_oc));
+        
+        % 已知条件，液滴面积是逐渐变大的，若发现变小则异常处理
+        if (i>1 && area(group, i)<area(group, i-1))
+            img_maxarea = img_maxarea | img_oc_last; %在上次基础上处理
+            se = strel('disk',5); %圆盘特征
+            img_open = imopen(img_maxarea, se);
+            se1 = strel('disk',7); %圆盘特征
+            img_oc = imclose(img_open, se1);
+            img_oc = bwareaopen(img_oc, 500); %删除图像中小面积区域
+            img_res = img .* uint8(img_oc);
+            area(group, i) = sum(sum(img_oc));
+        end
+        
+        img_oc_last = img_oc; %保存上次处理结果
+        
         [m, n] = size(img_oc);
         area_all(group, i) = m * n;
         area_percent(group, i) = area(group, i) / area_all(group, i) * 100;
