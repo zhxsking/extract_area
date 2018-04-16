@@ -5,14 +5,15 @@ name = {'a', 'b', 'c'};
 for group=3:-1:1 %第几组图片
     figure;
     for i=1:3 %组中第几张图片
-        img_ori = imread(strcat(name{i}, num2str(group), '.png'));
-        img_ori = imresize(img_ori, [137,183]);
+        img = imread(strcat(name{i}, num2str(group), '.png'));
+%         img = imresize(img_ori, [135,181]);
         
         % 去除图片红色边框避免多个域连通
-        cut = 3; %裁剪的边缘宽
-        [h, w, ~] = size(img_ori);
-        rect = [cut, cut, w-2*cut, h-2*cut];
-        img = imcrop(img_ori, rect);
+%         cut = 3; %裁剪的边缘宽
+%         [h, w, ~] = size(img_ori);
+%         rect = [cut, cut, w-2*cut, h-2*cut];
+%         img = imcrop(img_ori, rect);
+%         imwrite(img, strcat(name{i}, num2str(group), '.jpg'));
         
         % 增强并二值
         img_hsi = rgb2hsi(img);
